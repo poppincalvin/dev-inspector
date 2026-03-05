@@ -1,584 +1,719 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevInspector — Hover, Inspect, Copy for AI</title>
-  <meta name="description" content="Zero-dependency element inspector. Hover to inspect, click to copy structured UI data for AI coding assistants. Supports React, Vue, Angular, Svelte.">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevInspector — Hover, Inspect, Copy for AI</title>
+    <meta
+      name="description"
+      content="Zero-dependency element inspector. Hover to inspect, click to copy structured UI data for AI coding assistants. Supports React, Vue, Angular, Svelte."
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    :root {
-      --bg: #0d0d14;
-      --bg-card: #16161f;
-      --bg-code: #1a1a26;
-      --brand: #E07050;
-      --brand-dim: rgba(224, 112, 80, 0.15);
-      --green: #4ade80;
-      --blue: #80b0ff;
-      --purple: #a78bfa;
-      --yellow: #f0d080;
-      --text: #e0e0e0;
-      --text-dim: #888;
-      --border: rgba(255,255,255,0.08);
-      --mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
-    }
+      :root {
+        --bg: #0d0d14;
+        --bg-card: #16161f;
+        --bg-code: #1a1a26;
+        --brand: #e07050;
+        --brand-dim: rgba(224, 112, 80, 0.15);
+        --green: #4ade80;
+        --blue: #80b0ff;
+        --purple: #a78bfa;
+        --yellow: #f0d080;
+        --text: #e0e0e0;
+        --text-dim: #888;
+        --border: rgba(255, 255, 255, 0.08);
+        --mono: "SF Mono", "Fira Code", "JetBrains Mono", Consolas, monospace;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
 
-    /* ── Layout ── */
-    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+      /* ── Layout ── */
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
 
-    section {
-      padding: 80px 0;
-      border-bottom: 1px solid var(--border);
-    }
+      section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--border);
+      }
 
-    h2 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #fff;
-    }
+      h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #fff;
+      }
 
-    h2 .accent { color: var(--brand); }
+      h2 .accent {
+        color: var(--brand);
+      }
 
-    .section-sub {
-      color: var(--text-dim);
-      font-size: 16px;
-      margin-bottom: 40px;
-    }
+      .section-sub {
+        color: var(--text-dim);
+        font-size: 16px;
+        margin-bottom: 40px;
+      }
 
-    /* ── Hero ── */
-    .hero {
-      padding: 120px 0 100px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+      /* ── Hero ── */
+      .hero {
+        padding: 120px 0 100px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -200px; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 600px;
-      background: radial-gradient(ellipse, rgba(224,112,80,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 600px;
+        background: radial-gradient(
+          ellipse,
+          rgba(224, 112, 80, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
 
-    .hero h1 {
-      font-size: 56px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-      position: relative;
-    }
+      .hero h1 {
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 16px;
+        position: relative;
+      }
 
-    .hero h1 span { color: var(--brand); }
+      .hero h1 span {
+        color: var(--brand);
+      }
 
-    .hero .tagline {
-      font-size: 20px;
-      color: var(--text-dim);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      line-height: 1.5;
-    }
+      .hero .tagline {
+        font-size: 20px;
+        color: var(--text-dim);
+        max-width: 560px;
+        margin: 0 auto 40px;
+        line-height: 1.5;
+      }
 
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      position: relative;
-    }
+      .hero-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+      }
 
-    .btn-primary {
-      background: var(--brand);
-      color: #fff;
-    }
-    .btn-primary:hover { background: #c55a3c; transform: translateY(-1px); }
+      .btn-primary {
+        background: var(--brand);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #c55a3c;
+        transform: translateY(-1px);
+      }
 
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover { border-color: rgba(255,255,255,0.2); }
+      .btn-secondary {
+        background: var(--bg-card);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-secondary:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+      }
 
-    .bookmarklet-btn {
-      background: var(--brand);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-block;
-      cursor: grab;
-      transition: all 0.2s;
-      border: 2px solid transparent;
-    }
-    .bookmarklet-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(224,112,80,0.3);
-    }
-    .bookmarklet-btn:active { cursor: grabbing; }
+      .bookmarklet-btn {
+        background: var(--brand);
+        color: #fff;
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        cursor: grab;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+      }
+      .bookmarklet-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(224, 112, 80, 0.3);
+      }
+      .bookmarklet-btn:active {
+        cursor: grabbing;
+      }
 
-    .drag-hint {
-      font-size: 13px;
-      color: var(--text-dim);
-      margin-top: 12px;
-    }
+      .drag-hint {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin-top: 12px;
+      }
 
-    /* ── Features ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
+      /* ── Features ── */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
 
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      transition: border-color 0.2s;
-    }
-    .feature-card:hover { border-color: rgba(224,112,80,0.3); }
+      .feature-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        transition: border-color 0.2s;
+      }
+      .feature-card:hover {
+        border-color: rgba(224, 112, 80, 0.3);
+      }
 
-    .feature-icon {
-      font-size: 28px;
-      margin-bottom: 12px;
-    }
+      .feature-icon {
+        font-size: 28px;
+        margin-bottom: 12px;
+      }
 
-    .feature-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #fff;
-    }
+      .feature-card h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #fff;
+      }
 
-    .feature-card p {
-      font-size: 14px;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
+      .feature-card p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.5;
+      }
 
-    /* ── Demo ── */
-    .demo-area {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 40px;
-      text-align: center;
-    }
+      /* ── Demo ── */
+      .demo-area {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+      }
 
-    .demo-area h3 {
-      font-size: 20px;
-      margin-bottom: 8px;
-      color: #fff;
-    }
+      .demo-area h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: #fff;
+      }
 
-    .demo-area p {
-      color: var(--text-dim);
-      margin-bottom: 24px;
-      font-size: 14px;
-    }
+      .demo-area p {
+        color: var(--text-dim);
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
 
-    .demo-elements {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+      .demo-elements {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-    .demo-btn {
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.15s;
-    }
-    .demo-btn:hover { transform: scale(1.05); }
-    .demo-btn.primary { background: var(--brand); color: #fff; }
-    .demo-btn.secondary { background: var(--bg-code); color: var(--text); border: 1px solid var(--border); }
-    .demo-btn.outline { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
+      .demo-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+      .demo-btn:hover {
+        transform: scale(1.05);
+      }
+      .demo-btn.primary {
+        background: var(--brand);
+        color: #fff;
+      }
+      .demo-btn.secondary {
+        background: var(--bg-code);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .demo-btn.outline {
+        background: transparent;
+        color: var(--brand);
+        border: 1px solid var(--brand);
+      }
 
-    .demo-card {
-      background: var(--bg-code);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-      max-width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
+      .demo-card {
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+      }
 
-    .demo-card .label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--brand);
-      margin-bottom: 6px;
-    }
+      .demo-card .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--brand);
+        margin-bottom: 6px;
+      }
 
-    .demo-card .title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 4px;
-    }
+      .demo-card .title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 4px;
+      }
 
-    .demo-card .desc {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
+      .demo-card .desc {
+        font-size: 13px;
+        color: var(--text-dim);
+      }
 
-    /* ── Code block ── */
-    .code-block {
-      background: var(--bg-code);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 1.7;
-      overflow-x: auto;
-      text-align: left;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+      /* ── Code block ── */
+      .code-block {
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 24px;
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 1.7;
+        overflow-x: auto;
+        text-align: left;
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
-    .code-block .c-blue { color: var(--blue); }
-    .code-block .c-green { color: var(--green); }
-    .code-block .c-yellow { color: var(--yellow); }
-    .code-block .c-dim { color: var(--text-dim); }
-    .code-block .c-brand { color: var(--brand); }
+      .code-block .c-blue {
+        color: var(--blue);
+      }
+      .code-block .c-green {
+        color: var(--green);
+      }
+      .code-block .c-yellow {
+        color: var(--yellow);
+      }
+      .code-block .c-dim {
+        color: var(--text-dim);
+      }
+      .code-block .c-brand {
+        color: var(--brand);
+      }
 
-    /* ── Workflow ── */
-    .workflow {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
+      /* ── Workflow ── */
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
 
-    .workflow-step {
-      text-align: center;
-      padding: 24px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      position: relative;
-    }
+      .workflow-step {
+        text-align: center;
+        padding: 24px 12px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        position: relative;
+      }
 
-    .workflow-step .step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--brand-dim);
-      color: var(--brand);
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
+      .workflow-step .step-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--brand-dim);
+        color: var(--brand);
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
 
-    .workflow-step .step-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
+      .workflow-step .step-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
 
-    .workflow-step h4 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #fff;
-    }
+      .workflow-step h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #fff;
+      }
 
-    .workflow-step p {
-      font-size: 12px;
-      color: var(--text-dim);
-    }
+      .workflow-step p {
+        font-size: 12px;
+        color: var(--text-dim);
+      }
 
-    /* ── Install ── */
-    .install-methods {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
+      /* ── Install ── */
+      .install-methods {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
 
-    .install-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-    }
+      .install-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+      }
 
-    .install-card h3 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #fff;
-    }
+      .install-card h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #fff;
+      }
 
-    .install-card .tag {
-      display: inline-block;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: var(--brand-dim);
-      color: var(--brand);
-      margin-bottom: 12px;
-    }
+      .install-card .tag {
+        display: inline-block;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--brand-dim);
+        color: var(--brand);
+        margin-bottom: 12px;
+      }
 
-    .install-card p {
-      font-size: 13px;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
+      .install-card p {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.5;
+      }
 
-    .install-card code {
-      font-family: var(--mono);
-      font-size: 12px;
-      background: var(--bg-code);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--yellow);
-    }
+      .install-card code {
+        font-family: var(--mono);
+        font-size: 12px;
+        background: var(--bg-code);
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--yellow);
+      }
 
-    /* ── Footer ── */
-    footer {
-      padding: 40px 0;
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 14px;
-    }
+      /* ── Footer ── */
+      footer {
+        padding: 40px 0;
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 14px;
+      }
 
-    footer a {
-      color: var(--brand);
-      text-decoration: none;
-    }
-    footer a:hover { text-decoration: underline; }
+      footer a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
 
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 36px; }
-      .hero .tagline { font-size: 16px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .workflow { grid-template-columns: repeat(2, 1fr); }
-      .install-methods { grid-template-columns: 1fr; }
-      section { padding: 60px 0; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ═══════════════ Hero ═══════════════ -->
-  <section class="hero">
-    <div class="container">
-      <h1>Dev<span>Inspector</span></h1>
-      <p class="tagline">
-        Hover to inspect, click to copy structured UI data.<br>
-        Paste to your AI coding assistant. Zero dependencies.
-      </p>
-      <div class="hero-actions">
-        <a class="bookmarklet-btn" href="javascript:void(0)" id="bookmarklet-link">
-          &#x1F50D; DevInspector &mdash; Drag to Bookmarks Bar
-        </a>
-      </div>
-      <p class="drag-hint">Drag the button above to your bookmarks bar to install, or click to activate on this page.</p>
-      <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
-        <a class="btn btn-secondary" href="https://github.com/nicekate/dev-inspector">GitHub</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ Features ═══════════════ -->
-  <section id="features">
-    <div class="container">
-      <h2>Why <span class="accent">DevInspector</span>?</h2>
-      <p class="section-sub">
-        A screenshot costs ~3000 tokens. DevInspector output? ~150 tokens.
-      </p>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">&#x1F7E5;</div>
-          <h3>Element Highlight</h3>
-          <p>Pixel-perfect overlay shows exact boundaries. Follows your cursor in real-time with zero flicker.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#x1F4CB;</div>
-          <h3>Style Properties</h3>
-          <p>Font size, color, padding, margin, border-radius, background — all computed values in one panel.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#x1F9E9;</div>
-          <h3>Component Chain</h3>
-          <p>React Fiber traversal extracts the full component tree. Also detects Vue, Angular, and Svelte.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#x1F4CB;</div>
-          <h3>One-Click Copy</h3>
-          <p>Click any element to copy structured data to clipboard. Paste directly into AI chat.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ Live Demo ═══════════════ -->
-  <section id="demo">
-    <div class="container">
-      <h2>Live <span class="accent">Demo</span></h2>
-      <p class="section-sub">
-        DevInspector is running on this page. Press <kbd style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:13px;">⌥A</kbd> or click the badge to activate, then hover over these elements:
-      </p>
-      <div class="demo-area">
-        <h3>Sample Component</h3>
-        <p>Try hovering and clicking on any element below</p>
-        <div class="demo-elements">
-          <button class="demo-btn primary">Primary Button</button>
-          <button class="demo-btn secondary">Secondary</button>
-          <button class="demo-btn outline">Outline</button>
-        </div>
-        <div class="demo-card">
-          <div class="label">Featured</div>
-          <div class="title">Card Title</div>
-          <div class="desc">Hover over this card to inspect its properties with DevInspector.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ Clipboard Format ═══════════════ -->
-  <section id="format">
-    <div class="container">
-      <h2>Clipboard <span class="accent">Format</span></h2>
-      <p class="section-sub">Structured, token-efficient output your AI assistant can parse instantly.</p>
-      <div class="code-block">
-        <span class="c-brand">[DevInspector]</span><br>
-        <span class="c-blue">Component: App &gt; Header &gt; NavBar</span><br>
-        <span class="c-dim">Element: nav.main-nav.sticky</span><br>
-        <span class="c-green">Position: (0, 0) 1440&times;64</span><br>
-        <span class="c-yellow">Font size: 14px | Line height: 20px | Color: #1a1a2e</span><br>
-        <span class="c-yellow">Padding: 12px 24px | Margin: 0px | Radius: 0px</span><br>
-        <span class="c-yellow">Background: #ffffff</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ AI Workflow ═══════════════ -->
-  <section id="workflow">
-    <div class="container">
-      <h2>AI <span class="accent">Workflow</span></h2>
-      <p class="section-sub">Four steps from inspection to AI-assisted fix.</p>
-      <div class="workflow">
-        <div class="workflow-step">
-          <div class="step-num">1</div>
-          <div class="step-icon">&#x1F50D;</div>
-          <h4>Inspect</h4>
-          <p>Toggle inspector with ⌥A and hover over any element</p>
-        </div>
-        <div class="workflow-step">
-          <div class="step-num">2</div>
-          <div class="step-icon">&#x1F4CB;</div>
-          <h4>Copy</h4>
-          <p>Click the element to copy structured data</p>
-        </div>
-        <div class="workflow-step">
-          <div class="step-num">3</div>
-          <div class="step-icon">&#x1F4DD;</div>
-          <h4>Paste</h4>
-          <p>Paste into Claude, Cursor, or Copilot Chat</p>
-        </div>
-        <div class="workflow-step">
-          <div class="step-num">4</div>
-          <div class="step-icon">&#x2705;</div>
-          <h4>Done</h4>
-          <p>AI generates precise, context-aware fixes</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ Install ═══════════════ -->
-  <section id="install">
-    <div class="container">
-      <h2><span class="accent">Install</span></h2>
-      <p class="section-sub">Three ways to get started. No build step required.</p>
-      <div class="install-methods">
-        <div class="install-card">
-          <h3>Bookmarklet</h3>
-          <div class="tag">Recommended</div>
-          <p>Drag the button at the top of this page to your bookmarks bar. Click it on any site to activate.</p>
-        </div>
-        <div class="install-card">
-          <h3>Console Paste</h3>
-          <div class="tag">Quick</div>
-          <p>Open DevTools, paste the content of <code>src/dev-inspector.js</code> into the console, press Enter.</p>
-        </div>
-        <div class="install-card">
-          <h3>Script Tag</h3>
-          <div class="tag">Dev Only</div>
-          <p>Add <code>&lt;script src="..."&gt;</code> to your HTML during development. Remove before production.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ Footer ═══════════════ -->
-  <footer>
-    <div class="container">
-      <p>
-        <a href="https://github.com/nicekate/dev-inspector">GitHub</a>
-        &nbsp;&middot;&nbsp;
-        <a href="LICENSE">MIT License</a>
-      </p>
-      <p style="margin-top: 8px; font-size: 12px; color: #555;">
-        Zero dependencies. Works everywhere.
-      </p>
-    </div>
-  </footer>
-
-  <!-- ═══════════════ Load DevInspector for Live Demo ═══════════════ -->
-  <script src="../src/dev-inspector.js"></script>
-  <script>
-    // Update bookmarklet link with inline script
-    (function() {
-      var btn = document.getElementById('bookmarklet-link');
-      // Read the source and create a bookmarklet-style href
-      // For the landing page, clicking the button just toggles the already-loaded inspector
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (window.__devInspector) {
-          window.__devInspector.toggle();
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 36px;
         }
-      });
-    })();
-  </script>
-</body>
+        .hero .tagline {
+          font-size: 16px;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .workflow {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .install-methods {
+          grid-template-columns: 1fr;
+        }
+        section {
+          padding: 60px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════ Hero ═══════════════ -->
+    <section class="hero">
+      <div class="container">
+        <h1>Dev<span>Inspector</span></h1>
+        <p class="tagline">
+          Hover to inspect, click to copy structured UI data.<br />
+          Paste to your AI coding assistant. Zero dependencies.
+        </p>
+        <div class="hero-actions">
+          <a
+            class="bookmarklet-btn"
+            href="javascript:void(0)"
+            id="bookmarklet-link"
+          >
+            &#x1F50D; DevInspector &mdash; Drag to Bookmarks Bar
+          </a>
+        </div>
+        <p class="drag-hint">
+          Drag the button above to your bookmarks bar to install, or click to
+          activate on this page.
+        </p>
+        <div
+          style="
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+          "
+        >
+          <a
+            class="btn btn-secondary"
+            href="https://github.com/nicekate/dev-inspector"
+            >GitHub</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ Features ═══════════════ -->
+    <section id="features">
+      <div class="container">
+        <h2>Why <span class="accent">DevInspector</span>?</h2>
+        <p class="section-sub">
+          A screenshot costs ~3000 tokens. DevInspector output? ~150 tokens.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">&#x1F7E5;</div>
+            <h3>Element Highlight</h3>
+            <p>
+              Pixel-perfect overlay shows exact boundaries. Follows your cursor
+              in real-time with zero flicker.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#x1F4CB;</div>
+            <h3>Style Properties</h3>
+            <p>
+              Font size, color, padding, margin, border-radius, background — all
+              computed values in one panel.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#x1F9E9;</div>
+            <h3>Component Chain</h3>
+            <p>
+              React Fiber traversal extracts the full component tree. Also
+              detects Vue, Angular, and Svelte.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#x1F4CB;</div>
+            <h3>One-Click Copy</h3>
+            <p>
+              Click any element to copy structured data to clipboard. Paste
+              directly into AI chat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ Live Demo ═══════════════ -->
+    <section id="demo">
+      <div class="container">
+        <h2>Live <span class="accent">Demo</span></h2>
+        <p class="section-sub">
+          DevInspector is running on this page. Press
+          <kbd
+            style="
+              background: var(--bg-card);
+              padding: 2px 8px;
+              border-radius: 4px;
+              font-family: var(--mono);
+              font-size: 13px;
+            "
+            >⌥A</kbd
+          >
+          or click the badge to activate, then hover over these elements:
+        </p>
+        <div class="demo-area">
+          <h3>Sample Component</h3>
+          <p>Try hovering and clicking on any element below</p>
+          <div class="demo-elements">
+            <button class="demo-btn primary">Primary Button</button>
+            <button class="demo-btn secondary">Secondary</button>
+            <button class="demo-btn outline">Outline</button>
+          </div>
+          <div class="demo-card">
+            <div class="label">Featured</div>
+            <div class="title">Card Title</div>
+            <div class="desc">
+              Hover over this card to inspect its properties with DevInspector.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ Clipboard Format ═══════════════ -->
+    <section id="format">
+      <div class="container">
+        <h2>Clipboard <span class="accent">Format</span></h2>
+        <p class="section-sub">
+          Structured, token-efficient output your AI assistant can parse
+          instantly.
+        </p>
+        <div class="code-block">
+          <span class="c-brand">[DevInspector]</span><br />
+          <span class="c-blue">Component: App &gt; Header &gt; NavBar</span
+          ><br />
+          <span class="c-dim">Element: nav.main-nav.sticky</span><br />
+          <span class="c-green">Position: (0, 0) 1440&times;64</span><br />
+          <span class="c-yellow"
+            >Font size: 14px | Line height: 20px | Color: #1a1a2e</span
+          ><br />
+          <span class="c-yellow"
+            >Padding: 12px 24px | Margin: 0px | Radius: 0px</span
+          ><br />
+          <span class="c-yellow">Background: #ffffff</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ AI Workflow ═══════════════ -->
+    <section id="workflow">
+      <div class="container">
+        <h2>AI <span class="accent">Workflow</span></h2>
+        <p class="section-sub">
+          Four steps from inspection to AI-assisted fix.
+        </p>
+        <div class="workflow">
+          <div class="workflow-step">
+            <div class="step-num">1</div>
+            <div class="step-icon">&#x1F50D;</div>
+            <h4>Inspect</h4>
+            <p>Toggle inspector with ⌥A and hover over any element</p>
+          </div>
+          <div class="workflow-step">
+            <div class="step-num">2</div>
+            <div class="step-icon">&#x1F4CB;</div>
+            <h4>Copy</h4>
+            <p>Click the element to copy structured data</p>
+          </div>
+          <div class="workflow-step">
+            <div class="step-num">3</div>
+            <div class="step-icon">&#x1F4DD;</div>
+            <h4>Paste</h4>
+            <p>Paste into Claude, Cursor, or Copilot Chat</p>
+          </div>
+          <div class="workflow-step">
+            <div class="step-num">4</div>
+            <div class="step-icon">&#x2705;</div>
+            <h4>Done</h4>
+            <p>AI generates precise, context-aware fixes</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ Install ═══════════════ -->
+    <section id="install">
+      <div class="container">
+        <h2><span class="accent">Install</span></h2>
+        <p class="section-sub">
+          Three ways to get started. No build step required.
+        </p>
+        <div class="install-methods">
+          <div class="install-card">
+            <h3>Bookmarklet</h3>
+            <div class="tag">Recommended</div>
+            <p>
+              Drag the button at the top of this page to your bookmarks bar.
+              Click it on any site to activate.
+            </p>
+          </div>
+          <div class="install-card">
+            <h3>Console Paste</h3>
+            <div class="tag">Quick</div>
+            <p>
+              Open DevTools, paste the content of
+              <code>src/dev-inspector.js</code> into the console, press Enter.
+            </p>
+          </div>
+          <div class="install-card">
+            <h3>Script Tag</h3>
+            <div class="tag">Dev Only</div>
+            <p>
+              Add <code>&lt;script src="..."&gt;</code> to your HTML during
+              development. Remove before production.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ Footer ═══════════════ -->
+    <footer>
+      <div class="container">
+        <p>
+          <a href="https://github.com/nicekate/dev-inspector">GitHub</a>
+          &nbsp;&middot;&nbsp;
+          <a href="LICENSE">MIT License</a>
+        </p>
+        <p style="margin-top: 8px; font-size: 12px; color: #555">
+          Zero dependencies. Works everywhere.
+        </p>
+      </div>
+    </footer>
+
+    <!-- ═══════════════ Load DevInspector for Live Demo ═══════════════ -->
+    <script src="../src/dev-inspector.js"></script>
+    <script>
+      // Update bookmarklet link with inline script
+      (function () {
+        var btn = document.getElementById("bookmarklet-link");
+        // Read the source and create a bookmarklet-style href
+        // For the landing page, clicking the button just toggles the already-loaded inspector
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          if (window.__devInspector) {
+            window.__devInspector.toggle();
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>

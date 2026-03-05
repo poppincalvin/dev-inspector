@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "DevInspector",
+  "version": "1.0.0",
+  "description": "Hover to inspect, click to copy structured UI info for AI coding assistants",
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/dev-inspector.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

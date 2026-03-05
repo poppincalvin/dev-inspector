@@ -57,12 +57,12 @@ AI 编程助手需要的是**结构化的元素数据**，不是截图。
 
 ## 框架支持
 
-| 框架 | 检测方式 |
-|------|----------|
-| **React** | Fiber 树 → 组件链（自动过滤 Router/Redux 内部组件） |
-| **Vue 2/3** | `__vue__` / `__vueParentComponent` → 组件名 |
-| **Angular** | `__ng*` 属性检测 |
-| **Svelte** | `__svelte_meta` 检测 |
+| 框架        | 检测方式                                            |
+| ----------- | --------------------------------------------------- |
+| **React**   | Fiber 树 → 组件链（自动过滤 Router/Redux 内部组件） |
+| **Vue 2/3** | `__vue__` / `__vueParentComponent` → 组件名         |
+| **Angular** | `__ng*` 属性检测                                    |
+| **Svelte**  | `__svelte_meta` 检测                                |
 
 ---
 
@@ -114,6 +114,7 @@ npm run build
 ```
 
 输出：
+
 - `dist/dev-inspector.min.js` — 压缩脚本
 - `dist/bookmarklet.txt` — 可直接使用的 bookmarklet URL
 

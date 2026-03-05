@@ -49,7 +49,9 @@ async function build() {
   // Print stats
   console.log("\n  DevInspector Build\n");
   console.log(`  Source:      ${(srcSize / 1024).toFixed(1)} KB`);
-  console.log(`  Minified:    ${(minSize / 1024).toFixed(1)} KB  (${((1 - minSize / srcSize) * 100).toFixed(0)}% smaller)`);
+  console.log(
+    `  Minified:    ${(minSize / 1024).toFixed(1)} KB  (${((1 - minSize / srcSize) * 100).toFixed(0)}% smaller)`,
+  );
   console.log(`  Bookmarklet: ${(bmSize / 1024).toFixed(1)} KB`);
   console.log(`\n  dist/dev-inspector.min.js`);
   console.log(`  dist/bookmarklet.txt\n`);

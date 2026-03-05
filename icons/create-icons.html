@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Generate DevInspector Icons</title>
+  </head>
+  <body>
+    <p>Right-click each canvas and "Save image as" to the icons/ folder</p>
+    <div id="canvases"></div>
+    <script>
+      [16, 48, 128].forEach((size) => {
+        const c = document.createElement("canvas");
+        c.width = c.height = size;
+        const ctx = c.getContext("2d");
+
+        // Background circle
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#E07050";
+        ctx.fill();
+
+        // Magnifying glass
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = size * 0.08;
+        ctx.lineCap = "round";
+
+        // Circle part
+        const cx = size * 0.42,
+          cy = size * 0.4,
+          r = size * 0.22;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Handle
+        const angle = Math.PI * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+        ctx.lineTo(size * 0.75, size * 0.72);
+        ctx.stroke();
+
+        const label = document.createElement("div");
+        label.innerHTML = `<p>icon${size}.png:</p>`;
+        label.appendChild(c);
+        document.getElementById("canvases").appendChild(label);
+
+        // Auto download
+        const link = document.createElement("a");
+        link.download = `icon${size}.png`;
+        link.href = c.toDataURL("image/png");
+        link.click();
+      });
+    </script>
+  </body>
+</html>

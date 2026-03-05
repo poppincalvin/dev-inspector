@@ -55,12 +55,12 @@ Background: #ffffff
 
 ## Framework Support
 
-| Framework | Detection |
-|-----------|-----------|
-| **React** | Fiber tree → component chain (filters internal Router/Redux components) |
-| **Vue 2/3** | `__vue__` / `__vueParentComponent` → component name |
-| **Angular** | `__ng*` key detection |
-| **Svelte** | `__svelte_meta` detection |
+| Framework   | Detection                                                               |
+| ----------- | ----------------------------------------------------------------------- |
+| **React**   | Fiber tree → component chain (filters internal Router/Redux components) |
+| **Vue 2/3** | `__vue__` / `__vueParentComponent` → component name                     |
+| **Angular** | `__ng*` key detection                                                   |
+| **Svelte**  | `__svelte_meta` detection                                               |
 
 ---
 
@@ -112,6 +112,7 @@ npm run build
 ```
 
 Outputs:
+
 - `dist/dev-inspector.min.js` — minified script
 - `dist/bookmarklet.txt` — ready-to-use bookmarklet URL
 

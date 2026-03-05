@@ -13,54 +13,68 @@
   // ── i18n ──
   var isZh = /^zh/i.test(navigator.language);
   var T = {
-    badge:       isZh ? "🔍 Inspector"               : "🔍 Inspector",
-    badgeOn:     isZh ? "🔍 Inspector ON (⌥A)"        : "🔍 Inspector ON (⌥A)",
-    copied:      isZh ? "✅ 已复制到剪贴板"            : "✅ Copied to clipboard",
-    clickHint:   isZh ? "👆 点击元素复制信息"          : "👆 Click to copy",
-    component:   isZh ? "组件"                         : "Component",
-    framework:   isZh ? "框架"                         : "Framework",
-    element:     isZh ? "元素"                         : "Element",
-    position:    isZh ? "位置"                         : "Position",
-    fontSize:    isZh ? "字号"                         : "Font size",
-    lineHeight:  isZh ? "行高"                         : "Line height",
-    color:       isZh ? "颜色"                         : "Color",
-    padding:     isZh ? "内边距"                       : "Padding",
-    margin:      isZh ? "外边距"                       : "Margin",
-    borderRadius:isZh ? "圆角"                         : "Radius",
-    background:  isZh ? "背景"                         : "Background",
+    badge: isZh ? "🔍 Inspector" : "🔍 Inspector",
+    badgeOn: isZh ? "🔍 Inspector ON (⌥A)" : "🔍 Inspector ON (⌥A)",
+    copied: isZh ? "✅ 已复制到剪贴板" : "✅ Copied to clipboard",
+    clickHint: isZh ? "👆 点击元素复制信息" : "👆 Click to copy",
+    component: isZh ? "组件" : "Component",
+    framework: isZh ? "框架" : "Framework",
+    element: isZh ? "元素" : "Element",
+    position: isZh ? "位置" : "Position",
+    fontSize: isZh ? "字号" : "Font size",
+    lineHeight: isZh ? "行高" : "Line height",
+    color: isZh ? "颜色" : "Color",
+    padding: isZh ? "内边距" : "Padding",
+    margin: isZh ? "外边距" : "Margin",
+    borderRadius: isZh ? "圆角" : "Radius",
+    background: isZh ? "背景" : "Background",
   };
 
   // ── Style property map ──
   var PROPS = [
-    [T.fontSize,     "font-size"],
-    [T.lineHeight,   "line-height"],
-    ["font-weight",  "font-weight"],
-    [T.color,        "color"],
-    [T.background,   "background-color"],
-    [T.padding,      "padding"],
-    [T.margin,       "margin"],
+    [T.fontSize, "font-size"],
+    [T.lineHeight, "line-height"],
+    ["font-weight", "font-weight"],
+    [T.color, "color"],
+    [T.background, "background-color"],
+    [T.padding, "padding"],
+    [T.margin, "margin"],
     [T.borderRadius, "border-radius"],
-    ["width",        "width"],
-    ["height",       "height"],
-    ["position",     "position"],
-    ["display",      "display"],
-    ["opacity",      "opacity"],
-    ["overflow",     "overflow"],
-    ["gap",          "gap"],
+    ["width", "width"],
+    ["height", "height"],
+    ["position", "position"],
+    ["display", "display"],
+    ["opacity", "opacity"],
+    ["overflow", "overflow"],
+    ["gap", "gap"],
   ];
 
   // ── Internal component filter ──
   var INTERNAL_NAMES = [
-    "Router", "Routes", "Route", "RenderedRoute",
-    "Provider", "Navigation", "Location",
-    "PresenceChild", "AnimatePresence",
-    "BrowserRouter", "HashRouter", "MemoryRouter",
-    "Navigate", "Outlet", "RouterProvider",
-    "StaticRouter", "Link",
-    "ConnectedRouter", "Connect",
+    "Router",
+    "Routes",
+    "Route",
+    "RenderedRoute",
+    "Provider",
+    "Navigation",
+    "Location",
+    "PresenceChild",
+    "AnimatePresence",
+    "BrowserRouter",
+    "HashRouter",
+    "MemoryRouter",
+    "Navigate",
+    "Outlet",
+    "RouterProvider",
+    "StaticRouter",
+    "Link",
+    "ConnectedRouter",
+    "Connect",
   ];
   var INTERNAL_SET = {};
-  INTERNAL_NAMES.forEach(function (n) { INTERNAL_SET[n] = true; });
+  INTERNAL_NAMES.forEach(function (n) {
+    INTERNAL_SET[n] = true;
+  });
 
   // ── Utilities ──
   function fmtColor(v) {
@@ -241,8 +255,13 @@
     // Position & size line
     html +=
       '<div style="color:#4ade80;margin-bottom:8px">📐 (' +
-      Math.round(rect.x) + ", " + Math.round(rect.y) +
-      ") " + Math.round(rect.width) + "×" + Math.round(rect.height) +
+      Math.round(rect.x) +
+      ", " +
+      Math.round(rect.y) +
+      ") " +
+      Math.round(rect.width) +
+      "×" +
+      Math.round(rect.height) +
       "</div>";
 
     html +=
@@ -268,7 +287,8 @@
     html +=
       '<div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:6px;padding-top:6px;' +
       'color:#666;text-align:center;font-size:11px">' +
-      T.clickHint + "</div>";
+      T.clickHint +
+      "</div>";
 
     panel.innerHTML = html;
     panel.style.display = "block";
@@ -300,7 +320,8 @@
     if (fw) lines.push(T.framework + ": " + fw);
     lines.push(T.element + ": " + sel);
     lines.push(
-      T.position + ": (" +
+      T.position +
+        ": (" +
         Math.round(rect.x) +
         ", " +
         Math.round(rect.y) +
@@ -313,12 +334,36 @@
     var fs = comp.getPropertyValue("font-size");
     var lh = comp.getPropertyValue("line-height");
     var col = fmtColor(comp.getPropertyValue("color"));
-    lines.push(T.fontSize + ": " + fs + " | " + T.lineHeight + ": " + lh + " | " + T.color + ": " + col);
+    lines.push(
+      T.fontSize +
+        ": " +
+        fs +
+        " | " +
+        T.lineHeight +
+        ": " +
+        lh +
+        " | " +
+        T.color +
+        ": " +
+        col,
+    );
 
     var pad = comp.getPropertyValue("padding");
     var mar = comp.getPropertyValue("margin");
     var br = comp.getPropertyValue("border-radius");
-    lines.push(T.padding + ": " + pad + " | " + T.margin + ": " + mar + " | " + T.borderRadius + ": " + br);
+    lines.push(
+      T.padding +
+        ": " +
+        pad +
+        " | " +
+        T.margin +
+        ": " +
+        mar +
+        " | " +
+        T.borderRadius +
+        ": " +
+        br,
+    );
 
     var bg = fmtColor(comp.getPropertyValue("background-color"));
     lines.push(T.background + ": " + bg);
@@ -355,16 +400,21 @@
     if (e.altKey && e.code === "KeyA") {
       e.preventDefault();
       setActive(!active);
+      return;
     }
-    if (e.code === "Escape" && active) {
+    if (
+      active &&
+      (e.key === "Escape" || e.code === "Escape" || e.keyCode === 27)
+    ) {
       e.preventDefault();
+      e.stopPropagation();
       setActive(false);
     }
   }
 
   document.addEventListener("mousemove", onMove, true);
   document.addEventListener("click", onClick, true);
-  window.addEventListener("keydown", onKey);
+  window.addEventListener("keydown", onKey, true);
 
   badge.addEventListener("click", function (e) {
     e.stopPropagation();
@@ -379,7 +429,7 @@
     destroy: function () {
       document.removeEventListener("mousemove", onMove, true);
       document.removeEventListener("click", onClick, true);
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keydown", onKey, true);
       root.remove();
       delete window.__devInspector;
     },
