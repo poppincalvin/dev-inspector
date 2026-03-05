@@ -1,45 +1,47 @@
+[English](README.md) | [中文](README.zh-CN.md)
+
 # DevInspector
 
-> Hover, inspect, copy — paste structured UI info to your AI coding assistant.
+> Zero-dependency element inspector. Hover, click, copy — structured UI data for AI coding assistants.
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![No Dependencies](https://img.shields.io/badge/dependencies-0-green.svg)](#)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![No Dependencies](https://img.shields.io/badge/dependencies-0-green.svg)](#) [![Chrome Extension](https://img.shields.io/badge/chrome-extension-brightgreen.svg)](#chrome-extension-recommended)
 
-AI coding assistants need **structured element data**, not screenshots.
-A screenshot costs ~3000 tokens. DevInspector's clipboard output? **~150 tokens.**
-
----
+**AI assistants need structured data, not screenshots.**
+A screenshot costs ~3000 tokens. DevInspector output? **~150 tokens.**
 
 ## Install
 
-### Bookmarklet (recommended)
+### Chrome Extension (recommended)
 
-1. Run `npm install && npm run build`
-2. Copy the content of `dist/bookmarklet.txt`
-3. Create a new bookmark and paste as the URL
+Persistent, works on every page, no manual activation needed.
+
+1. Clone this repo (or download ZIP)
+2. Open `chrome://extensions/` → enable **Developer mode**
+3. Click **Load unpacked** → select the project folder
+4. Refresh any page → **Alt+A** to toggle
+
+### Bookmarklet
+
+1. `npm install && npm run build`
+2. Copy content of `dist/bookmarklet.txt`
+3. Create a bookmark → paste as URL → click to activate on any page
 
 ### Console Paste
 
-Open DevTools console and paste the content of `src/dev-inspector.js`.
-
-### Script Tag
-
-```html
-<script src="https://unpkg.com/dev-inspector/src/dev-inspector.js"></script>
-```
-
----
+Open DevTools → paste `src/dev-inspector.js` → runs immediately.
 
 ## Usage
 
-1. **⌥A** (Alt+A) to toggle inspector — or click the badge
-2. **Hover** any element to see highlight + property panel
-3. **Click** the element to copy structured info to clipboard
-4. **Paste** into your AI assistant (Claude Code, Cursor, Copilot Chat, etc.)
-5. **ESC** to deactivate
+| Key            | Action                                  |
+| -------------- | --------------------------------------- |
+| **Alt+A** (⌥A) | Toggle inspector on/off                 |
+| **Hover**      | Highlight element + show property panel |
+| **Click**      | Copy structured info to clipboard       |
+| **ESC**        | Deactivate inspector                    |
 
----
+Paste the copied output into Claude Code, Cursor, Copilot Chat, or any AI assistant.
 
-## Clipboard Format
+## Output Format
 
 ```
 [DevInspector]
@@ -51,72 +53,35 @@ Padding: 12px 24px | Margin: 0px | Radius: 0px
 Background: #ffffff
 ```
 
----
+~150 tokens — 20x cheaper than a screenshot.
 
 ## Framework Support
 
-| Framework   | Detection                                                               |
-| ----------- | ----------------------------------------------------------------------- |
-| **React**   | Fiber tree → component chain (filters internal Router/Redux components) |
-| **Vue 2/3** | `__vue__` / `__vueParentComponent` → component name                     |
-| **Angular** | `__ng*` key detection                                                   |
-| **Svelte**  | `__svelte_meta` detection                                               |
+| Framework   | Detection                                                     |
+| ----------- | ------------------------------------------------------------- |
+| **React**   | Fiber tree → component chain (filters Router/Redux internals) |
+| **Vue 2/3** | `__vue__` / `__vueParentComponent` → component name           |
+| **Angular** | `__ng*` key detection                                         |
+| **Svelte**  | `__svelte_meta` detection                                     |
 
----
+## i18n
 
-## Use with AI Assistants
-
-### Claude Code
-
-```
-Look at this element and suggest improvements:
-
-[DevInspector]
-Component: App > ProductCard
-Element: div.card.shadow-md
-Position: (120, 340) 320×180
-Font size: 16px | Line height: 24px | Color: #333333
-Padding: 16px | Margin: 0px 8px | Radius: 12px
-Background: #ffffff
-```
-
-### Cursor / Copilot Chat
-
-Paste DevInspector output directly in the chat — AI gets precise element context without a screenshot.
-
----
+Auto-detects `navigator.language` — switches between English and Chinese for panel labels and clipboard output.
 
 ## API
 
 ```js
-// Toggle inspector on/off
-window.__devInspector.toggle();
-
-// Remove inspector completely
-window.__devInspector.destroy();
+window.__devInspector.toggle(); // toggle on/off
+window.__devInspector.destroy(); // remove completely
 ```
-
----
-
-## i18n
-
-DevInspector auto-detects `navigator.language` and switches between English and Chinese (中文) for panel labels and clipboard output.
-
----
 
 ## Build
 
 ```bash
-npm install
-npm run build
+npm install && npm run build
 ```
 
-Outputs:
-
-- `dist/dev-inspector.min.js` — minified script
-- `dist/bookmarklet.txt` — ready-to-use bookmarklet URL
-
----
+Outputs `dist/dev-inspector.min.js` (minified) and `dist/bookmarklet.txt`.
 
 ## License
 

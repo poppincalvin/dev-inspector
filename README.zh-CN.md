@@ -2,46 +2,46 @@
 
 # DevInspector
 
-> 悬停、检查、复制 — 将结构化 UI 信息粘贴给你的 AI 编程助手。
+> 零依赖元素检查器。悬停、点击、复制 — 为 AI 编程助手提供结构化 UI 数据。
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![No Dependencies](https://img.shields.io/badge/dependencies-0-green.svg)](#)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![No Dependencies](https://img.shields.io/badge/dependencies-0-green.svg)](#) [![Chrome Extension](https://img.shields.io/badge/chrome-extension-brightgreen.svg)](#chrome-扩展推荐)
 
-AI 编程助手需要的是**结构化的元素数据**，不是截图。
-一张截图消耗 ~3000 tokens，DevInspector 的剪贴板输出只要 **~150 tokens**。
-
----
+**AI 助手需要结构化数据，不是截图。**
+一张截图消耗 ~3000 tokens，DevInspector 输出只要 **~150 tokens**。
 
 ## 安装
 
-### Bookmarklet（推荐）
+### Chrome 扩展（推荐）
 
-1. 运行 `npm install && npm run build`
-2. 复制 `dist/bookmarklet.txt` 的内容
-3. 新建书签，粘贴为 URL
+常驻后台，所有页面自动生效，无需手动激活。
+
+1. 克隆仓库（或下载 ZIP）
+2. 打开 `chrome://extensions/` → 开启**开发者模式**
+3. 点击**加载已解压的扩展程序** → 选择项目文件夹
+4. 刷新任意页面 → **Alt+A** 切换
+
+### Bookmarklet
+
+1. `npm install && npm run build`
+2. 复制 `dist/bookmarklet.txt` 内容
+3. 新建书签 → 粘贴为 URL → 点击即可在任意页面激活
 
 ### 控制台粘贴
 
-打开 DevTools 控制台，粘贴 `src/dev-inspector.js` 的内容即可。
-
-### Script 标签
-
-```html
-<script src="https://unpkg.com/dev-inspector/src/dev-inspector.js"></script>
-```
-
----
+打开 DevTools → 粘贴 `src/dev-inspector.js` → 立即生效。
 
 ## 使用
 
-1. **⌥A** (Alt+A) 切换检查器 — 或点击右上角标记
-2. **悬停** 任意元素查看高亮 + 属性面板
-3. **点击** 元素复制结构化信息到剪贴板
-4. **粘贴** 到你的 AI 助手（Claude Code、Cursor、Copilot Chat 等）
-5. **ESC** 关闭检查器
+| 按键           | 操作                    |
+| -------------- | ----------------------- |
+| **Alt+A** (⌥A) | 切换检查器开关          |
+| **悬停**       | 高亮元素 + 显示属性面板 |
+| **点击**       | 复制结构化信息到剪贴板  |
+| **ESC**        | 关闭检查器              |
 
----
+将复制的内容粘贴到 Claude Code、Cursor、Copilot Chat 或任意 AI 助手。
 
-## 剪贴板格式
+## 输出格式
 
 ```
 [DevInspector]
@@ -53,7 +53,7 @@ AI 编程助手需要的是**结构化的元素数据**，不是截图。
 背景: #ffffff
 ```
 
----
+~150 tokens — 比截图省 20 倍。
 
 ## 框架支持
 
@@ -64,61 +64,24 @@ AI 编程助手需要的是**结构化的元素数据**，不是截图。
 | **Angular** | `__ng*` 属性检测                                    |
 | **Svelte**  | `__svelte_meta` 检测                                |
 
----
+## 国际化
 
-## 配合 AI 助手使用
-
-### Claude Code
-
-```
-看看这个元素，帮我优化样式：
-
-[DevInspector]
-组件: App > ProductCard
-元素: div.card.shadow-md
-位置: (120, 340) 320×180
-字号: 16px | 行高: 24px | 颜色: #333333
-内边距: 16px | 外边距: 0px 8px | 圆角: 12px
-背景: #ffffff
-```
-
-### Cursor / Copilot Chat
-
-直接粘贴 DevInspector 输出到对话框 — AI 无需截图就能获得精确的元素上下文。
-
----
+自动检测 `navigator.language`，中英文自动切换面板标签和剪贴板输出。
 
 ## API
 
 ```js
-// 切换检查器开关
-window.__devInspector.toggle();
-
-// 完全移除检查器
-window.__devInspector.destroy();
+window.__devInspector.toggle(); // 切换开关
+window.__devInspector.destroy(); // 完全移除
 ```
-
----
-
-## 国际化
-
-DevInspector 自动检测 `navigator.language`，在中英文之间切换面板标签和剪贴板输出。
-
----
 
 ## 构建
 
 ```bash
-npm install
-npm run build
+npm install && npm run build
 ```
 
-输出：
-
-- `dist/dev-inspector.min.js` — 压缩脚本
-- `dist/bookmarklet.txt` — 可直接使用的 bookmarklet URL
-
----
+输出 `dist/dev-inspector.min.js`（压缩版）和 `dist/bookmarklet.txt`。
 
 ## 许可证
 
