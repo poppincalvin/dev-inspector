@@ -1,0 +1,27 @@
+{
+  "name": "dev-inspector",
+  "version": "1.0.0",
+  "description": "Zero-dependency element inspector — hover, inspect, copy structured UI info for AI coding assistants",
+  "main": "src/dev-inspector.js",
+  "scripts": {
+    "build": "node scripts/build.js"
+  },
+  "keywords": [
+    "inspector",
+    "devtools",
+    "bookmarklet",
+    "ai",
+    "claude",
+    "cursor",
+    "copilot",
+    "react",
+    "vue",
+    "angular",
+    "svelte"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.37.0"
+  }
+}
